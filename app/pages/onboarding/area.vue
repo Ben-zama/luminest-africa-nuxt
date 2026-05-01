@@ -85,13 +85,55 @@
 </template>
 
 <script setup>
+import { ref, watch, onMounted } from 'vue'
+
 definePageMeta({
   layout: 'empty'
 })
 
-import { ref, watch, onMounted } from 'vue'
+// --- Dummy Data ---
+const dummyStates = [
+  { id: 1, name: 'Lagos', alias: 'lagos' },
+  { id: 2, name: 'Abuja', alias: 'abuja' },
+  { id: 3, name: 'Rivers', alias: 'rivers' }
+]
 
-const config = useRuntimeConfig()
+const dummyLgas = {
+  1: [
+    { id: 101, name: 'Ikeja', alias: 'ikeja' },
+    { id: 102, name: 'Surulere', alias: 'surulere' },
+    { id: 103, name: 'Eti-Osa', alias: 'eti-osa' }
+  ],
+  2: [
+    { id: 201, name: 'Garki', alias: 'garki' },
+    { id: 202, name: 'Bwari', alias: 'bwari' },
+    { id: 203, name: 'Abaji', alias: 'abaji' }
+  ],
+  3: [
+    { id: 301, name: 'Port Harcourt', alias: 'port-harcourt' },
+    { id: 302, name: 'Obio-Akpor', alias: 'obio-akpor' },
+    { id: 303, name: 'Eleme', alias: 'eleme' }
+  ]
+}
+
+const dummyCities = {
+  1: [
+    { id: 1001, name: 'Yaba', alias: 'yaba' },
+    { id: 1002, name: 'Victoria Island', alias: 'victoria-island' },
+    { id: 1003, name: 'Maryland', alias: 'maryland' }
+  ],
+  2: [
+    { id: 2001, name: 'Maitama', alias: 'maitama' },
+    { id: 2002, name: 'Wuse 2', alias: 'wuse-2' },
+    { id: 2003, name: 'Asokoro', alias: 'asokoro' }
+  ],
+  3: [
+    { id: 3001, name: 'GRA Phase 1', alias: 'gra-phase-1' },
+    { id: 3002, name: 'Trans Amadi', alias: 'trans-amadi' },
+    { id: 3003, name: 'Rumuola', alias: 'rumuola' }
+  ]
+}
+// ------------------
 
 // Data Arrays
 const states = ref([])
@@ -108,22 +150,15 @@ const loadingStates = ref(false)
 const loadingLgas = ref(false)
 const loadingCities = ref(false)
 
-// Reusable fetch options with the Toneflix API Key
-const getApiOptions = () => {
-  const headers = new Headers()
-  headers.append("X-Api-Key", config.apiSecret)
-
-  return { method: "GET", headers, redirect: "follow" }
-}
+// Helper to simulate API delay so the UI loading states still work visually
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 // 1. Fetch States on page load
 const fetchStates = async () => {
   loadingStates.value = true
   try {
-    const response = await fetch(`https://naija-places.toneflix.com.ng/api/v1/states`, getApiOptions())
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
-    const data = await response.json()
-    states.value = data.data || data || []
+    await delay(600) // Simulate network request
+    states.value = dummyStates
   } catch (error) {
     console.error('Failed to fetch states:', error)
   } finally {
@@ -135,10 +170,8 @@ const fetchStates = async () => {
 const fetchLgas = async (stateId) => {
   loadingLgas.value = true
   try {
-    const response = await fetch(`https://naija-places.toneflix.com.ng/api/v1/states/${stateId}/lgas`, getApiOptions())
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
-    const data = await response.json()
-    lgas.value = data.data || data || []
+    await delay(500)
+    lgas.value = dummyLgas[stateId] || []
   } catch (error) {
     console.error('Failed to fetch LGAs:', error)
   } finally {
@@ -146,20 +179,12 @@ const fetchLgas = async (stateId) => {
   }
 }
 
-// 3. Fetch Cities for the selected state (Using the exact nested route you provided)
+// 3. Fetch Cities for the selected state
 const fetchCities = async (stateId) => {
   loadingCities.value = true
   try {
-    const response = await fetch(`https://naija-places.toneflix.com.ng/api/v1/states/${stateId}/cities`, getApiOptions())
-    
-    if (!response.ok) {
-      const errorText = await response.text()
-      console.error('Cities API responded with:', response.status, errorText)
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-    
-    const data = await response.json()
-    cities.value = data.data || data || []
+    await delay(500)
+    cities.value = dummyCities[stateId] || []
   } catch (error) {
     console.error('Failed to fetch Cities:', error)
   } finally {
@@ -167,7 +192,7 @@ const fetchCities = async (stateId) => {
   }
 }
 
-// Watcher triggers both API calls concurrently when State changes
+// Watcher triggers both mock API calls concurrently when State changes
 watch(selectedState, (newState) => {
   // Reset downstream selections to prevent invalid data
   selectedLga.value = null
@@ -176,7 +201,6 @@ watch(selectedState, (newState) => {
   cities.value = []
   
   if (newState && newState.id) {
-    // We pass the numeric ID directly into the nested routes
     fetchLgas(newState.id)
     fetchCities(newState.id)
   }
@@ -273,10 +297,10 @@ const submitArea = () => {
       transition: border-color 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
 
       option {
-    /* Use your solid background variable, NOT a transparent rgba value */
-    background-color: var(--color-background); 
-    color: var(--color-text);
-  }
+        /* Use your solid background variable, NOT a transparent rgba value */
+        background-color: var(--color-background); 
+        color: var(--color-text);
+      }
 
       &:focus {
         border-color: var(--color-primary);
