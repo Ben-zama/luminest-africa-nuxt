@@ -111,7 +111,7 @@ const loadingCities = ref(false)
 // Reusable fetch options with the Toneflix API Key
 const getApiOptions = () => {
   const headers = new Headers()
-  headers.append("X-Api-Key", config.public.apiKey)
+  headers.append("X-Api-Key", config.apiSecret)
 
   return { method: "GET", headers, redirect: "follow" }
 }
