@@ -112,8 +112,6 @@ const loadingCities = ref(false)
 const getApiOptions = () => {
   const headers = new Headers()
   headers.append("X-Api-Key", config.public.apiKey)
-  headers.append("Accept", "application/json")
-  headers.append("Content-Type", "application/json")
 
   return { method: "GET", headers, redirect: "follow" }
 }
