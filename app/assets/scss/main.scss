@@ -1,0 +1,42 @@
+/* app/assets/scss/main.scss */
+
+:root {
+  --font-heading: 'Inter', sans-serif;
+  --font-body: 'Roboto', sans-serif;
+
+  --color-background: #f8f8f7; 
+  --color-text: #020403;
+  --color-primary: #014035; 
+  --color-secondary: #230dc7; 
+  --color-positive: #22c55e;
+  --color-negative: #ef4444; 
+  --color-info: #0ea5e9;
+  --color-border: rgba(0, 0, 0, 0.2);
+  color-scheme: light;
+}
+
+.dark {
+  --color-background: #020403; 
+  --color-text: #f8f8f7;
+  --color-primary: #dcf238; 
+  --color-secondary: #febfca; 
+  --color-border: rgba(255, 255, 255, 0.2);
+  color-scheme: dark;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
