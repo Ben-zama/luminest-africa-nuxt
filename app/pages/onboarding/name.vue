@@ -305,8 +305,8 @@ const submitArea = () => {
 
   .btn-primary {
     width: 100%;
-    background-color: var(--color-positive);
-    color: white;
+    background-color: var(--color-primary);
+    color: var(--color-background);
     font-weight: bold;
     font-size: 1rem;
     padding: 0.875rem;
@@ -316,7 +316,7 @@ const submitArea = () => {
     transition: background-color 0.2s ease, opacity 0.2s ease;
 
     &:hover:not(:disabled) {
-      background-color: darken(#22c55e, 5%);
+      background-color: color-mix(in srgb, var(--color-primary) 80%, #000);
     }
 
     &:disabled {
