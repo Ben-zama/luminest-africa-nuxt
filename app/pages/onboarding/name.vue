@@ -37,6 +37,10 @@
 </template>
 
 <script setup>
+definePageMeta({
+ layout: 'empty'
+})
+
 import { ref } from 'vue'
 
 const userName = ref('')
