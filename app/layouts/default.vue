@@ -123,7 +123,7 @@ const tabs = [
   bottom: 0;
   width: 100%;
   border-top: 1px solid var(--color-border);
-  background-color: transparent;
+  background-color: var(--color-background);
   margin-top: auto;
   padding-bottom: env(safe-area-inset-bottom);
 }
